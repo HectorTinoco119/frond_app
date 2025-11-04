@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a1f0f, #1a2e2a);
+      color: #e8f5e8;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 90%;
+      max-width: 1000px;
+      background: rgba(15, 25, 20, 0.95);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(76, 175, 80, 0.3);
+      animation: fadeIn 0.8s ease;
+    }
+
+    .image-side {
+      flex: 1;
+      background: linear-gradient(160deg, #4caf50, #00bcd4);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .image-side h1 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .image-side p {
+      font-size: 1rem;
+      opacity: 0.9;
+      max-width: 300px;
+      font-weight: 500;
+    }
+
+    .form-side {
+      flex: 1.2;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(10, 20, 15, 0.9);
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+
+    .tab {
+      cursor: pointer;
+      font-weight: 600;
+      color: #b0d4b0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid transparent;
+      transition: 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .tab.active {
+      color: #4caf50;
+      border-color: #4caf50;
+    }
+
+    .tab:hover {
+      color: #00bcd4;
+    }
+
+    form {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+      animation: slideIn 0.5s ease;
+    }
+
+    form.active {
+      display: flex;
+    }
+
+    label {
+      font-size: 0.95rem;
+      color: #d8f0d8;
+      font-weight: 500;
+    }
+
+    input, select {
+      padding: 14px;
+      background: rgba(10, 20, 15, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #e8f5e8;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #4caf50;
+      background: rgba(20, 35, 25, 0.9);
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 14px;
+      background: linear-gradient(90deg, #4caf50, #00bcd4);
+      border: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+    }
+
+    #alertContainer {
+      margin-top: 20px;
+      text-align: center;
+      color: #e8f5e8;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 850px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+      .image-side {
+        padding: 35px 20px;
+      }
+      .form-side {
+        padding: 35px 25px;
+      }
+      .tabs {
+        gap: 15px;
+      }
+    }
+  </style>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="image-side">
+      <h1>Panel de Administracion</h1>
+      <p>Gestiona usuarios, configura el sistema y mantén el control desde un solo lugar.</p>
+    </div>
+
+    <div class="form-side">
+      <div class="tabs">
+        <div class="tab active" id="tab-login">Iniciar Sesión</div>
+        <div class="tab" id="tab-register">Registrarse</div>
+      </div>
+
+      <form id="loginForm" class="active">
+        <label>Correo</label>
+        <input type="email" id="loginEmail" placeholder="usuario@correo.com">
+        <label>Contraseña</label>
+        <input type="password" id="loginPassword" placeholder="********">
+        <button type="button" onclick="login()">Ingresar</button>
+      </form>
+
+      <form id="registerForm">
+        <label>Correo</label>
+        <input type="email" id="regEmail" placeholder="usuario@correo.com">
+        <label>Contraseña</label>
+        <input type="password" id="regPassword" placeholder="********">
+        <label>Nombre</label>
+        <input type="text" id="regFirstname" placeholder="Juan">
+        <label>Apellido</label>
+        <input type="text" id="regLastname" placeholder="Pérez">
+        <label>País</label>
+        <input type="text" id="regCountry" placeholder="Perú">
+        <label>Rol</label>
+        <select id="regRole">
+          <option value="ADMIN">ADMIN</option>
+          <option value="USER">USER</option>
+        </select>
+        <button type="button" onclick="register()">Registrar</button>
+      </form>
+
+      <div id="alertContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    tabLogin.addEventListener('click', () => {
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      loginForm.classList.add('active');
+      registerForm.classList.remove('active');
+    });
+
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      registerForm.classList.add('active');
+      loginForm.classList.remove('active');
+    });
+  </script>
+</body>
+</html>

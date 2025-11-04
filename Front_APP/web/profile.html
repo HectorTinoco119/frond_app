@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #0b0f14, #0f1621);
+      color: #f2f4f8;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 90%;
+      max-width: 1000px;
+      background: rgba(25, 28, 35, 0.9);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(90, 0, 255, 0.3);
+      animation: fadeIn 0.8s ease;
+    }
+
+    .image-side {
+      flex: 1;
+      background: linear-gradient(160deg, #5b00ff, #00bcd4);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .image-side h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .image-side p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      max-width: 300px;
+    }
+
+    .form-side {
+      flex: 1.2;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #11151c;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+      gap: 20px;
+    }
+
+    .tab {
+      cursor: pointer;
+      font-weight: 500;
+      color: #999;
+      padding-bottom: 6px;
+      border-bottom: 2px solid transparent;
+      transition: 0.3s;
+    }
+
+    .tab.active {
+      color: #00bcd4;
+      border-color: #00bcd4;
+    }
+
+    form {
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      animation: slideIn 0.5s ease;
+    }
+
+    form.active {
+      display: flex;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: #bbb;
+    }
+
+    input, select {
+      padding: 12px;
+      background: #1a1f27;
+      border: 1px solid #2b3240;
+      border-radius: 10px;
+      color: #e0e0e0;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: #00bcd4;
+      background: #20252e;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      background: linear-gradient(90deg, #00bcd4, #5b00ff);
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    #alertContainer {
+      margin-top: 15px;
+      text-align: center;
+      color: #f2f4f8;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 850px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+      .image-side {
+        padding: 30px;
+      }
+      .form-side {
+        padding: 30px;
+      }
+    }
+  </style>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="image-side">
+      <h1>Panel de Administracion</h1>
+      <p>Gestiona usuarios, configura el sistema y mantén el control desde un solo lugar.</p>
+    </div>
+
+    <div class="form-side">
+      <div class="tabs">
+        <div class="tab active" id="tab-login">Iniciar Sesión</div>
+        <div class="tab" id="tab-register">Registrarse</div>
+      </div>
+
+      <form id="loginForm" class="active">
+        <label>Correo</label>
+        <input type="email" id="loginEmail" placeholder="usuario@correo.com">
+        <label>Contraseña</label>
+        <input type="password" id="loginPassword" placeholder="********">
+        <button type="button" onclick="login()">Ingresar</button>
+      </form>
+
+      <form id="registerForm">
+        <label>Correo</label>
+        <input type="email" id="regEmail" placeholder="usuario@correo.com">
+        <label>Contraseña</label>
+        <input type="password" id="regPassword" placeholder="********">
+        <label>Nombre</label>
+        <input type="text" id="regFirstname" placeholder="Juan">
+        <label>Apellido</label>
+        <input type="text" id="regLastname" placeholder="Pérez">
+        <label>País</label>
+        <input type="text" id="regCountry" placeholder="Perú">
+        <label>Rol</label>
+        <select id="regRole">
+          <option value="ADMIN">ADMIN</option>
+          <option value="USER">USER</option>
+        </select>
+        <button type="button" onclick="register()">Registrar</button>
+      </form>
+
+      <div id="alertContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    tabLogin.addEventListener('click', () => {
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      loginForm.classList.add('active');
+      registerForm.classList.remove('active');
+    });
+
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      registerForm.classList.add('active');
+      loginForm.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
